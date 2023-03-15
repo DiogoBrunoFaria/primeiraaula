@@ -2,7 +2,7 @@ data "template_file" "desktop" {
   template = <<EOF
 #!/bin/bash
 LOGFILE="/var/log/cloud-config-"$(date +%s)
-SCRIPT_LOG_DETAIL="${LOGFILE}"_$(basename "$0").log
+SCRIPT_LOG_DETAIL="$LOGFILE"_$(basename "$0").log
 
 # Reference: https://serverfault.com/questions/103501/how-can-i-fully-log-all-bash-scripts-actions
 exec 3>&1 4>&2

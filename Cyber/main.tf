@@ -1,6 +1,6 @@
-resource "aws_key_pair" "CyberSecurity" {
+resource "aws_key_pair" "CiberSecurity" {
   key_name   = "Redes"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxcTKfPLiFwL5s6VnnEgIM1qwfCTc++Rh7f2uNjtY4nPYIqzT4Gu8uAwP1JnezPVBqdM2/XJpaVvYXCDywf9l2nHX74eKyjU/nGBKxffYcLYgxdaQN9qhtmDFu8+ajy1HZ1gUe7ITBe9X0eDaKyjUofWLYhEZA5Z3IrqfnglHWbttZ/dWTZxKDbG3PYeebnpqbwgfNObfP6raDpFnXxeChBaTW+Y7yIRYHMnEsTkvvTFRkCxHlA/1NT9sTgBSOU2lfaVfi6S7pIUyFVsGe5b7RQ9FpyW70bFaNfa++mS2HXtd3prDNVB1lEDSI6r52g5/6e1Cn+OT65ruFOnMfxe+z"
+  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDKMrAW+36D4oFTN/UkfMIgdwDnTmBqWbVhZLePjA+Ap00RGYqv0zDTu2diRNIo2ncns9zvxPOtSxELltRT+3CDs1GWdZ/OBAvvuYTV4brKNab8h8gsVNBmL/svB9F/4DlVfeTdviQMiPu0GqDHyyqRX4WHk/7+XCxoFqQKs/Cr4fI/Di70Xu7ejeZ85AkoPoirRBKTHj45oV/kfWutFDUbuxuKN0EC9Iy8MAUAo6Y0NVglxs2FPZQoXmyrLJ3fcxnqo95/ZOPziLmTJ9ZbogCmYU05KQTYXR9SKoz4fKJYDwP9jLjj3rTO8SIDZRRHA6auEzzrNzvmN0Xc7YtGsz41"
 }
 
 resource "aws_vpc" "CyberSecurity" {
@@ -30,7 +30,7 @@ resource "aws_subnet" "cyber_private2" {
 
 resource "aws_subnet" "cyber_private3" {
   availability_zone                              = var.avail_zone
-  cidr_block                                     = "10.0.3.0/24"
+  cidr_block                                     = "10.0.2.0/24"
   tags                                           = {
     "Name" = "CyberSecurity-subnet-cyber_private3"
   }
@@ -41,35 +41,35 @@ resource "aws_subnet" "cyber_public1" {
   availability_zone                              = var.avail_zone
   cidr_block                                     = "10.0.0.0/24"
   tags                                           = {
-    "Name" = "CyberSecurity-subnet-cyber_public1"
+    "Name" = "CyberSecuraty-subnet-cyber_public1"
   }
   vpc_id                                         = aws_vpc.CyberSecurity.id
 }
 
-resource "aws_internet_gateway" "CyberSecurity-igw" {
+resource "aws_internet_gateway" "CyberSecuraty-igw" {
   tags     = {
-    "Name" = "CyberSecurity-igw"
+    "Name" = "CyberSecuraty-igw"
   }
   vpc_id   = aws_vpc.CyberSecurity.id
 }
 
 resource "aws_route_table" "cyber_private1" {
   tags             = {
-    "Name" = "CyberSecurity-rtb-cyber_private1"
+    "Name" = "CyberSecuraty-rtb-pdl_private1"
   }
   vpc_id           = aws_vpc.CyberSecurity.id
 }
 
-resource "aws_route_table" "cyber_private2" {
+resource "aws_route_table" "Cyber_private2" {
   tags             = {
-    "Name" = "CyberSecurity-rtb-cyber_private2"
+    "Name" = "CyberSecuraty-rtb-pdl_private2"
   }
   vpc_id           = aws_vpc.CyberSecurity.id
 }
 
-resource "aws_route_table" "cyber_private3" {
+resource "aws_route_table" "Cyber_private3" {
   tags             = {
-    "Name" = "CyberSecurity-rtb-cyber_private3"
+    "Name" = "CyberSecuraty-rtb-pdl_private3"
   }
   vpc_id           = aws_vpc.CyberSecurity.id
 }
@@ -79,10 +79,10 @@ resource "aws_route_table" "cyber_public1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.CyberSecurity-igw.id
+    gateway_id = aws_internet_gateway.CyberSecuraty-igw.id
   }
   tags             = {
-    "Name" = "CyberSecurity-rtb-public"
+    "Name" = "CyberSecuraty-rtb-public"
   }
 }
 
@@ -92,19 +92,20 @@ resource "aws_route_table_association" "cyber_private1" {
 }
 
 resource "aws_route_table_association" "cyber_private2" {
-  route_table_id = aws_route_table.cyber_private2.id
+  route_table_id = aws_route_table.Cyber_private2.id
   subnet_id      = aws_subnet.cyber_private2.id
-}
-
-resource "aws_route_table_association" "cyber_private3" {
-  route_table_id = aws_route_table.cyber_private3.id
-  subnet_id      = aws_subnet.cyber_private3.id
 }
 
 resource "aws_route_table_association" "cyber_public1" {
   route_table_id = aws_route_table.cyber_public1.id
   subnet_id      = aws_subnet.cyber_public1.id
 }
+
+resource "aws_route_table_association" "cyber_private3" {
+  route_table_id = aws_route_table.Cyber_private3.id
+  subnet_id      = aws_subnet.cyber_private3.id
+}
+
 
 resource "aws_vpc_endpoint" "CyberSecurity-vpce-s3" {
   policy                = jsonencode(
@@ -122,12 +123,12 @@ resource "aws_vpc_endpoint" "CyberSecurity-vpce-s3" {
   )
   route_table_ids       = [
     aws_route_table.cyber_private1.id,
-    aws_route_table.cyber_private2.id,
-    aws_route_table.cyber_private3.id,
+    aws_route_table.Cyber_private2.id,
+    aws_route_table.Cyber_private3.id,
   ]
   service_name          = var.vpc_ep_svc_name
   tags                  = {
-    "Name" = "CyberSecurity-vpce-s3"
+    "Name" = "PontaDelgada-vpce-s3"
   }
   vpc_endpoint_type     = "Gateway"
   vpc_id                = aws_vpc.CyberSecurity.id
@@ -174,7 +175,7 @@ resource "aws_security_group" "cyber_default" {
   vpc_id      = aws_vpc.CyberSecurity.id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "cyber_home" {
+resource "aws_vpc_security_group_ingress_rule" "Cyber_home" {
   cidr_ipv4              = "128.65.243.205/32"
   description            = "Home"
   ip_protocol            = "-1"
@@ -184,7 +185,7 @@ resource "aws_vpc_security_group_ingress_rule" "cyber_home" {
   }
 }
 
-resource "aws_vpc_security_group_ingress_rule" "cyber_enta" {
+resource "aws_vpc_security_group_ingress_rule" "Cyber_enta" {
   cidr_ipv4              = "185.218.12.73/32"
   description            = "ENTA"
   ip_protocol            = "-1"
@@ -197,7 +198,7 @@ resource "aws_vpc_security_group_ingress_rule" "cyber_enta" {
 resource "aws_instance" "desktop" {
   ami                                  = var.deb_based
   instance_type                        = "t2.small"
-  key_name                             = aws_key_pair.CyberSecurity.key_name
+  key_name                             = aws_key_pair.CiberSecurity.key_name
   network_interface {
     device_index         = 0
     network_interface_id = aws_network_interface.desktop_cyber_public1.id
@@ -241,7 +242,7 @@ resource "aws_network_interface" "desktop_cyber_private2" {
 }
 
 resource "aws_network_interface" "desktop_cyber_private3" {
-  private_ips         = ["10.0.3.10"]
+  private_ips         = ["10.0.2.10"]
   security_groups    = [
     aws_security_group.cyber_default.id,
   ]
@@ -260,7 +261,7 @@ resource "aws_network_interface" "desktop_cyber_public1" {
   source_dest_check  = false
   subnet_id          = aws_subnet.cyber_public1.id
   tags                                 = {
-    "Name" = "CyberSecurity public interface"
+    "Name" = "PontaDelgada public interface"
   }
 }
 
